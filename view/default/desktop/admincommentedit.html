@@ -1,0 +1,95 @@
+{{ define "content" }}
+
+<form action="" method="post" onsubmit="return form_post();">
+<div class="nav-title">
+    <a href="/">{{.SiteCf.Name}}</a> &raquo; - 编辑评论
+</div>
+
+<div class="main-box">
+    <p><textarea id="id-content" name="content" class="mll tall" autocomplete="off">{{.Cobj.Content}}</textarea></p>
+
+    <div class="c"></div>
+
+    <p><div class="float-left">
+        <input id="btn-preview" type="button" value=" 预 览 " name="submit" class="textbtn" />
+        <input id="btn-submit" type="submit" value=" 提 交 " name="submit" class="textbtn" />
+    </div><div class="c"></div></p>
+
+    <div id="id_preview" class="topic-content"></div>
+
+</div>
+</form>
+
+<script>
+    $("#btn-preview").on("click", function(){
+        var content = $("#id-content").val();
+        if(content){
+            $(this).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                url: "/content/preview",
+                data: JSON.stringify({"act": "preview", "content": content}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){
+                    if(data.retcode==200) {
+                        $("#id_preview").html(data.html);
+                        $("#id_preview").addClass("previews");
+                        $("#id_preview pre code").each(function (i, block) {
+                            hljs.highlightBlock(block);
+                        });
+                        renderKatexInPreview();
+                    }else{
+                        $.toast(data.retmsg)
+                    }
+                    $("#btn-preview").attr("disabled", false);
+                },
+                failure: function(errMsg) {
+                    $.toast(errMsg);
+                    $("#btn-preview").attr("disabled", false);
+                }
+            });
+        }else{
+            $("#id-content").focus();
+        }
+    });
+
+    function form_post(){
+        var content = $("#id-content").val();
+
+        if(content){
+            $("#btn-submit").attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                url: "/admin/comment/edit/{{.Aobj.Id}}/{{.Cobj.Id}}",
+                data: JSON.stringify({"act": "submit", "content": content}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data){
+                    console.log(data);
+                    if(data.retcode == 200){
+                        window.location.href = "/t/"+data.aid;
+                        return
+                    }
+                    $.toast(data.retmsg);
+                    $("#btn-submit").attr("disabled", false);
+                },
+                failure: function(errMsg) {
+                    $.toast(errMsg);
+                    $("#btn-submit").attr("disabled", false);
+                }
+            });
+        }else{
+            if(!content){
+                $("#id-content").focus();
+            }
+            if(!title){
+                $("#id_title").focus();
+            }
+        }
+        return false;
+    }
+</script>
+
+
+{{ end}}

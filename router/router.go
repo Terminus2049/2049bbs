@@ -1,0 +1,60 @@
+package router
+
+import (
+	"github.com/dchest/captcha"
+	"github.com/terminus2049/2049bbs/controller"
+	"github.com/terminus2049/2049bbs/system"
+	"goji.io"
+	"goji.io/pat"
+)
+
+func NewRouter(app *system.Application) *goji.Mux {
+	sp := goji.SubMux()
+	h := controller.BaseHandler{App: app}
+
+	sp.HandleFunc(pat.Get("/"), h.ArticleHomeList)
+	sp.HandleFunc(pat.Get("/view"), h.ViewAtTpl)
+	sp.HandleFunc(pat.Get("/feed"), h.FeedHandler)
+	sp.HandleFunc(pat.Get("/feed/:cid"), h.FeedCategoryHandler)
+	sp.HandleFunc(pat.Get("/robots.txt"), h.Robots)
+
+	sp.Handle(pat.Get("/captcha/*"), captcha.Server(captcha.StdWidth, captcha.StdHeight))
+
+	sp.HandleFunc(pat.Get("/n/:cid"), h.CategoryDetail)
+	sp.HandleFunc(pat.Get("/member/:uid"), h.UserDetail)
+	sp.HandleFunc(pat.Get("/tag/:tag"), h.TagDetail)
+
+	sp.HandleFunc(pat.Get("/logout"), h.UserLogout)
+	sp.HandleFunc(pat.Get("/notification"), h.UserNotification)
+
+	sp.HandleFunc(pat.Get("/t/:aid"), h.ArticleDetail)
+	sp.HandleFunc(pat.Post("/t/:aid"), h.ArticleDetailPost)
+
+	sp.HandleFunc(pat.Get("/setting"), h.UserSetting)
+	sp.HandleFunc(pat.Post("/setting"), h.UserSettingPost)
+
+	sp.HandleFunc(pat.Get("/newpost/:cid"), h.ArticleAdd)
+	sp.HandleFunc(pat.Post("/newpost/:cid"), h.ArticleAddPost)
+
+	sp.HandleFunc(pat.Get("/login"), h.UserLogin)
+	sp.HandleFunc(pat.Post("/login"), h.UserLoginPost)
+	sp.HandleFunc(pat.Get("/register"), h.UserLogin)
+	sp.HandleFunc(pat.Post("/register"), h.UserLoginPost)
+
+	sp.HandleFunc(pat.Post("/content/preview"), h.ContentPreviewPost)
+
+	sp.HandleFunc(pat.Get("/admin/post/edit/:aid"), h.ArticleEdit)
+	sp.HandleFunc(pat.Post("/admin/post/edit/:aid"), h.ArticleEditPost)
+	sp.HandleFunc(pat.Get("/admin/comment/edit/:aid/:cid"), h.CommentEdit)
+	sp.HandleFunc(pat.Post("/admin/comment/edit/:aid/:cid"), h.CommentEditPost)
+	sp.HandleFunc(pat.Get("/admin/user/edit/:uid"), h.UserEdit)
+	sp.HandleFunc(pat.Post("/admin/user/edit/:uid"), h.UserEditPost)
+	sp.HandleFunc(pat.Get("/admin/user/list"), h.AdminUserList)
+	sp.HandleFunc(pat.Post("/admin/user/list"), h.AdminUserListPost)
+	sp.HandleFunc(pat.Get("/admin/category/list"), h.AdminCategoryList)
+	sp.HandleFunc(pat.Post("/admin/category/list"), h.AdminCategoryListPost)
+	sp.HandleFunc(pat.Get("/admin/link/list"), h.AdminLinkList)
+	sp.HandleFunc(pat.Post("/admin/link/list"), h.AdminLinkListPost)
+
+	return sp
+}

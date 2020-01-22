@@ -1,0 +1,12 @@
+version: '3'
+services:
+  bbs:
+    image: docker.pkg.github.com/speechfree/go-base/go-base:base
+    container_name: bbs
+    ports:
+      - 8000:8082
+    # env_file: dev.env
+    volumes:
+      - "./:/go/src/github.com/terminus2049/2049BBS"
+    working_dir: /go/src/github.com/terminus2049/2049BBS
+    command: ["tail", "-f", "/dev/null"]

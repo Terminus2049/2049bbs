@@ -1,0 +1,70 @@
+{{ define "content" }}
+
+<div class="nav-title">
+    <div id="nav" class="float-left fs14">
+        <a class="nav_btn active" href="/">首页</a>
+        <a class="nav_btn" href="/n/2">时政</a>
+        <a class="nav_btn" href="/n/17">外段</a>
+        <a class="nav_btn" href="/n/4">水</a>
+    </div>
+    {{if ge .CurrentUser.Flag 5}}
+    <div class="float-right"><a href="/newpost/1" class="newpostbtn">+发新帖</a></div>
+    {{end}}
+    <div class="c"></div>
+</div>
+
+<div class="main-box2 home-box-list2" style="float:left">
+    {{range $_, $item := .PageInfo.Items}}
+    {{if ne $item.Cid 2}}
+    <div class="post-list">
+        <div class="item-content3">
+            <h1><a href="/t/{{$item.Id}}">{{$item.Title}}</a></h1>
+            <span class="item-date"><a href="/n/{{$item.Cid}}">{{$item.Cname}}</a>  •  <a href="/member/{{$item.Uid}}">{{$item.Name}}</a>
+                • {{$item.EditTimeFmt}}
+            </span>
+        </div>
+        {{if $item.Comments}}
+        <div class="item-count"><a href="/t/{{$item.Id}}#reply{{$item.Comments}}">{{$item.Comments}}</a></div>
+        {{end}}
+        <div class="c"></div>
+    </div>
+    {{end}}
+    {{end}}
+
+</div>
+
+<div class="main-box2 home-box-list2" style="float:right">
+  {{range $_, $item := .PageInfo.Items}}
+  {{if eq $item.Cid 2}}
+  <div class="post-list">
+      <div class="item-content3">
+          <h1><a href="/t/{{$item.Id}}">{{$item.Title}}</a></h1>
+          <span class="item-date"><a href="/n/{{$item.Cid}}">{{$item.Cname}}</a>  •  <a href="/member/{{$item.Uid}}">{{$item.Name}}</a>
+              • {{$item.EditTimeFmt}}
+          </span>
+      </div>
+      {{if $item.Comments}}
+      <div class="item-count"><a href="/t/{{$item.Id}}#reply{{$item.Comments}}">{{$item.Comments}}</a></div>
+      {{end}}
+      <div class="c"></div>
+  </div>
+  {{end}}
+  {{end}}
+
+</div>
+
+<div class="c"></div>
+
+<div class="nav-title">
+    <div id="nav" class="fs14">
+      {{if .PageInfo.HasPrev}}
+      <a href="/?btn=prev&key={{.PageInfo.FirstKey}}&score={{.PageInfo.FirstScore}}" class="float-left">&laquo; 上一页</a>
+      {{end}}
+      {{if .PageInfo.HasNext}}
+      <a href="/?btn=next&key={{.PageInfo.LastKey}}&score={{.PageInfo.LastScore}}" class="float-right">下一页 &raquo;</a>
+      {{end}}
+    </div>
+    <div class="c"></div>
+</div>
+
+{{ end }}

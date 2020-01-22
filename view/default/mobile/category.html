@@ -1,0 +1,75 @@
+{{ define "content" }}
+
+<div class="nav-title">
+    <div class="float-left fs14" id="nav">
+          <a class="nav_btn" href="/">首页</a>
+          {{if eq .Cobj.Name "时政"}}
+          <a class="nav_btn active" href="/n/2">时政</a>
+          <a class="nav_btn" href="/n/17">外段</a>
+          <a class="nav_btn" href="/n/4">水</a>
+          {{else if eq .Cobj.Name "外段"}}
+          <a class="nav_btn" href="/n/2">时政</a>
+          <a class="nav_btn active" href="/n/17">外段</a>
+          <a class="nav_btn" href="/n/4">水</a>
+          {{else if eq .Cobj.Name "水"}}
+          <a class="nav_btn" href="/n/2">时政</a>
+          <a class="nav_btn" href="/n/17">外段</a>
+          <a class="nav_btn active" href="/n/4">水</a>
+          {{else}}
+          <a class="nav_btn" href="/n/2">时政</a>
+          <a class="nav_btn" href="/n/17">外段</a>
+          <a class="nav_btn" href="/n/4">水</a>
+          <a class="nav_btn active" href="/n/{{.Cobj.Id}}">{{.Cobj.Name}}</a>
+          {{end}}
+    </div>
+    {{if ge .CurrentUser.Flag 5}}
+    <div class="float-right"><a href="/newpost/{{.Cobj.Id}}" class="newpostbtn">+发新帖</a></div>
+    {{end}}
+    <div class="c"></div>
+</div>
+
+<div class="main-box home-box-list">
+
+    {{if .Cobj.About}}
+    <div class="post-list grey"><p>{{.Cobj.About}}</p></div>
+    {{end}}
+
+    {{range $_, $item := .PageInfo.Items}}
+    <div class="post-list">
+        <div class="item-avatar">
+            <a href="/member/{{$item.Uid}}"><img src="/static/avatar/{{$item.Avatar}}.jpg" alt="{{$item.Name}}" /></a>
+        </div>
+        <div class="item-content">
+            <h1><a href="/t/{{$item.Id}}">{{$item.Title}}</a></h1>
+            <span class="item-date">
+                <a href="/n/{{$item.Cid}}">{{$item.Cname}}</a>
+                • {{$item.EditTimeFmt}}
+                {{if $item.Comments}}
+                 • <a href="/member/{{$item.Ruid}}">{{$item.Rname}}</a>
+                {{else}}
+                • <a href="/member/{{$item.Uid}}">{{$item.Name}}</a>
+                {{end}}
+            </span>
+        </div>
+        {{if $item.Comments}}
+        <div class="item-count"><a href="/t/{{$item.Id}}#reply{{$item.Comments}}">{{$item.Comments}}</a></div>
+        {{end}}
+        <div class="c"></div>
+    </div>
+
+    {{end}}
+
+
+    <div class="pagination">
+        {{if .PageInfo.HasPrev}}
+        <a href="/n/{{.Cobj.Id}}?btn=prev&key={{.PageInfo.FirstKey}}&score={{.PageInfo.FirstScore}}" class="float-left">&laquo; 上一页</a>
+        {{end}}
+        {{if .PageInfo.HasNext}}
+        <a href="/n/{{.Cobj.Id}}?btn=next&key={{.PageInfo.LastKey}}&score={{.PageInfo.LastScore}}" class="float-right">下一页 &raquo;</a>
+        {{end}}
+        <div class="c"></div>
+    </div>
+
+</div>
+
+{{ end}}

@@ -1,0 +1,45 @@
+Main:
+    HttpPort: 80
+    HttpsOn: true
+    Domain: "2049bbs.xyz"
+    HttpsPort: 443
+    PubDir: "static"
+    ViewDir: "view/default"
+    Youdb: "mydata.db"
+    CookieSecure: true
+    CookieHttpOnly: true
+    OldSiteDomain: ""
+    TLSCrtFile: "certs/cloudflare.pem"
+    TLSKeyFile: "certs/cloudflare.key"
+Site:
+    Name: "2049BBS"
+    Desc: "Speak with no fear"
+    AdminEmail: ""
+    MainDomain: "http://2049bbs.xyz"
+    MainNodeIds: "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20"
+    MustLoginNodeIds: "19"
+    NotHomeNodeIds: "2,4,17,19"
+    AvatarMinId: 2539
+    AvatarMaxId: 2558
+    HomeNode: "2"
+    AdminBotId: 2942
+    AnonymousBotId: 2944
+    TimeZone: 0
+    HomeShowNum: 50
+    PageShowNum: 20
+    TagShowNum: 30
+    CategoryShowNum: 20
+    TitleMaxLen: 100
+    ContentMaxLen: 20000
+    PostInterval: 60
+    CommentListNum: 100
+    CommentInterval: 20
+    Authorized: false
+    RegReview: false
+    CloseReg: false
+    AutoDataBackup: true
+    AutoGetTag: true
+    UploadSuffix: ""
+    UploadImgOnly: false
+    UploadImgResize: false
+    UploadMaxSize: 50
