@@ -38,6 +38,7 @@ type SiteConf struct {
 	MainNodeIds       string
 	MustLoginNodeIds  string
 	NotHomeNodeIds    string
+	ProverbId         string
 	AvatarMinId       int
 	AvatarMaxId       int
 	HomeNode          string
