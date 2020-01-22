@@ -216,7 +216,6 @@
                         $("#id_preview pre code").each(function(i, block) {
                             hljs.highlightBlock(block);
                         });
-                        renderKatexInPreview();
                         $("#btn-preview").attr("disabled", false);
                     },
                     fail: function(errMsg) {
