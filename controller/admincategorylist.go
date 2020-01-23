@@ -2,11 +2,12 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/terminus2049/2049bbs/model"
-	"github.com/ego008/youdb"
-	"github.com/rs/xid"
 	"net/http"
 	"strconv"
+
+	"github.com/ego008/youdb"
+	"github.com/rs/xid"
+	"github.com/terminus2049/2049bbs/model"
 )
 
 func (h *BaseHandler) AdminCategoryList(w http.ResponseWriter, r *http.Request) {
@@ -46,6 +47,10 @@ func (h *BaseHandler) AdminCategoryList(w http.ResponseWriter, r *http.Request) 
 	}
 
 	pageInfo := model.CategoryList(db, cmd, key, h.App.Cf.Site.PageShowNum)
+
+	for i := 0; i < len(pageInfo.Items); i++ {
+		pageInfo.Items[i].Articles = db.Zget("category_article_num", youdb.I2b(pageInfo.Items[i].Id)).Uint64()
+	}
 
 	type pageData struct {
 		PageData

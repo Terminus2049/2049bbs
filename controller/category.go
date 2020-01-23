@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ego008/youdb"
 	"github.com/terminus2049/2049bbs/model"
 	"goji.io/pat"
 )
@@ -54,7 +53,6 @@ func (h *BaseHandler) CategoryDetail(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"retcode":404,"retmsg":"仅登录用户可见"}`))
 		return
 	}
-	cobj.Articles = db.Zget("category_article_num", youdb.I2b(cobj.Id)).Uint64()
 	pageInfo := model.ArticleList(db, cmd, "category_article_timeline:"+cid, key, score, scf.HomeShowNum, scf.TimeZone, "")
 
 	type pageData struct {
