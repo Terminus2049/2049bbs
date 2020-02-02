@@ -398,19 +398,22 @@ func (h *BaseHandler) ArticleHomeList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 类似 solidot 格言
-	proverbs := model.CommentList(db, "hscan", "article_comment:"+scf.ProverbId, "", 500, scf.TimeZone)
-	// 剔除折叠的回复
-	for i := 0; i < len(proverbs.Items); i++ {
-		if proverbs.Items[i].Fold {
-			proverbs.Items = append(proverbs.Items[:i], proverbs.Items[i+1:]...)
-			i--
+	if !evn.IsMobile {
+		proverbs := model.CommentList(db, "hscan", "article_comment:"+scf.ProverbId, "", 500, scf.TimeZone)
+		// 剔除折叠的回复
+		for i := 0; i < len(proverbs.Items); i++ {
+			if proverbs.Items[i].Fold {
+				proverbs.Items = append(proverbs.Items[:i], proverbs.Items[i+1:]...)
+				i--
+			}
+		}
+
+		rand.Seed(time.Now().Unix())
+		if len(proverbs.Items) > 0 {
+			evn.Proverb = proverbs.Items[rand.Intn(len(proverbs.Items))].ContentFmt
 		}
 	}
 
-	rand.Seed(time.Now().Unix())
-	if len(proverbs.Items) > 0 {
-		evn.Proverb = proverbs.Items[rand.Intn(len(proverbs.Items))].ContentFmt
-	}
 	evn.SiteInfo = si
 	evn.PageInfo = pageInfo
 	evn.Links = model.LinkList(db, false)
