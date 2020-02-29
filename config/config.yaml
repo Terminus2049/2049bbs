@@ -39,6 +39,7 @@ Site:
     RegReview: false
     CloseReg: false
     AutoDataBackup: false
+    ResetCookieKey: false
     AutoGetTag: true
     UploadSuffix: ""
     UploadImgOnly: false

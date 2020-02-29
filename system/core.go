@@ -58,6 +58,7 @@ type SiteConf struct {
 	RegReview         bool
 	CloseReg          bool
 	AutoDataBackup    bool
+	ResetCookieKey    bool
 	AutoGetTag        bool
 	GetTagApi         string
 	UploadSuffix      string
@@ -125,9 +126,27 @@ func (app *Application) Init(c *config.Engine, currentFilePath string) {
 	// set main node
 	db.Hset("keyValue", []byte("main_category"), []byte(scf.MainNodeIds))
 
-	app.Sc = securecookie.New(securecookie.GenerateRandomKey(64),
-		securecookie.GenerateRandomKey(32))
+	// app.Sc = securecookie.New(securecookie.GenerateRandomKey(64),
+	// 	securecookie.GenerateRandomKey(32))
 	//app.Sc.SetSerializer(securecookie.JSONEncoder{})
+
+	var hashKey []byte
+	var blockKey []byte
+	if scf.ResetCookieKey {
+		hashKey = securecookie.GenerateRandomKey(64)
+		blockKey = securecookie.GenerateRandomKey(32)
+		_ = db.Hmset("keyValue", []byte("hashKey"), hashKey, []byte("blockKey"), blockKey)
+	} else {
+		hashKey = append(hashKey, db.Hget("keyValue", []byte("hashKey")).Bytes()...)
+		blockKey = append(blockKey, db.Hget("keyValue", []byte("blockKey")).Bytes()...)
+		if len(hashKey) == 0 {
+			hashKey = securecookie.GenerateRandomKey(64)
+			blockKey = securecookie.GenerateRandomKey(32)
+			_ = db.Hmset("keyValue", []byte("hashKey"), hashKey, []byte("blockKey"), blockKey)
+		}
+	}
+
+	app.Sc = securecookie.New(hashKey, blockKey)
 
 	log.Println("youdb Connect to", mcf.Youdb)
 }
