@@ -1,0 +1,32 @@
+{{ define "content" }}
+
+<div class="nav-title">
+    <a href="/">{{.SiteCf.Name}}</a> &raquo; 权限受限用户列表：
+    <a href="/user/list?flag=0">已禁用0</a> |
+    <a href="/user/list?flag=6">不顶帖6</a> |
+</div>
+
+<div class="main-box">
+
+    <ul style="margin-left: 30px;padding: 0;">
+    {{range $_, $item := .PageInfo.Items}}
+    <li style="margin-bottom: 8px;">
+        id:{{$item.Id}} - {{$item.Name}} - flag: {{$item.Flag}} - info: {{$item.About}}
+        <a href="/member/{{$item.Id}}">查看</a>
+    </li>
+    {{end}}
+    </ul>
+
+    <div class="pagination">
+        {{if .PageInfo.HasPrev}}
+        <a href="/user/list?flag={{.Flag}}&btn=prev&key={{.PageInfo.FirstKey}}" class="float-left">&laquo; 上一页</a>
+        {{end}}
+        {{if .PageInfo.HasNext}}
+        <a href="/user/list?flag={{.Flag}}&btn=next&key={{.PageInfo.LastKey}}" class="float-right">下一页 &raquo;</a>
+        {{end}}
+        <div class="c"></div>
+    </div>
+
+</div>
+
+{{ end}}
