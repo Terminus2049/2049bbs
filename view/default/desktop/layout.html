@@ -19,11 +19,24 @@
     <link href="/feed" rel="alternate" title="{{.SiteCf.Name}} - ATOM Feed" type="application/atom+xml"/>
     <script src="/static/js/jquery.min.js" type="text/javascript"></script>
     <script src="/static/js/jquery.toast.js" type="text/javascript"></script>
+
+    {{if or (eq .Title "注册") (eq .Title "登录") }}
     <script src="/static/js/md5.min.js" type="text/javascript"></script>
+    {{end}}
+
+    {{if or (eq .Title "用户列表") (eq .Title "修改用户") }}
+    <script src="/static/js/md5.min.js" type="text/javascript"></script>
+    {{end}}
+
+    {{if eq .Title "设置" }}
+    <script src="/static/js/md5.min.js" type="text/javascript"></script>
+    {{end}}
+
     <link rel="top" title="Back to Top" href="#" />
     <meta name="keywords" content="{{.Keywords}}" />
     <meta name="description" content="{{.Description}}" />
 
+    {{if or (eq .PageName "article_detail") (eq .PageName "article_add")}}
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
           tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
@@ -33,6 +46,7 @@
     <script type="text/javascript" async
       src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
+    {{end}}
 
     <script type="text/javascript">
         $(function(){
