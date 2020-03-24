@@ -122,6 +122,10 @@ func CommentList(db *youdb.DB, cmd, tb, key string, limit, tz int) CommentPageIn
 				item.ContentFmt = template.HTML("<p><strike>用户已注销，隐藏回帖</strike></p>")
 			}
 
+			if item.Flag == 0 || item.Flag == 6 {
+				item.Fold = true
+			}
+
 			items = append(items, item)
 			if firstKey == 0 {
 				firstKey = item.Id
