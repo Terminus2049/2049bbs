@@ -60,7 +60,7 @@ func CommentDelByKey(db *youdb.DB, aid string, cid uint64) error {
 	return db.Hdel("article_comment:"+aid, youdb.I2b(cid))
 }
 
-func CommentList(db *youdb.DB, cmd, tb, key string, limit, tz int) CommentPageInfo {
+func CommentList(db *youdb.DB, cmd, tb, key string, limit, tz int, ignorelimitedusers bool) CommentPageInfo {
 	var items []CommentListItem
 	var citems []Comment
 	userMap := map[uint64]UserMini{}
@@ -126,7 +126,10 @@ func CommentList(db *youdb.DB, cmd, tb, key string, limit, tz int) CommentPageIn
 				item.Fold = true
 			}
 
-			items = append(items, item)
+			if !(ignorelimitedusers && (item.Flag == 0 || item.Flag == 6)) {
+				items = append(items, item)
+			}
+
 			if firstKey == 0 {
 				firstKey = item.Id
 			}

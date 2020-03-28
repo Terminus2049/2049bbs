@@ -113,15 +113,16 @@ func (h *BaseHandler) UserSettingPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type recForm struct {
-		Act        string `json:"act"`
-		Email      string `json:"email"`
-		Url        string `json:"url"`
-		About      string `json:"about"`
-		Password0  string `json:"password0"`
-		Password   string `json:"password"`
-		IgnoreNode string `json:"ignorenode"`
-		IgnoreUser string `json:"ignoreuser"`
-		Theme      string `json:"theme"`
+		Act                string `json:"act"`
+		Email              string `json:"email"`
+		Url                string `json:"url"`
+		About              string `json:"about"`
+		Password0          string `json:"password0"`
+		Password           string `json:"password"`
+		IgnoreNode         string `json:"ignorenode"`
+		IgnoreUser         string `json:"ignoreuser"`
+		Theme              string `json:"theme"`
+		IgnoreLimitedUsers string `json:"ignorelimitedusers"`
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -155,6 +156,13 @@ func (h *BaseHandler) UserSettingPost(w http.ResponseWriter, r *http.Request) {
 
 		currentUser.Theme = rec.Theme
 		isChanged = true
+
+		var isHidden bool
+		if rec.IgnoreLimitedUsers == "1" {
+			isHidden = true
+		}
+		currentUser.IgnoreLimitedUsers = isHidden
+
 	} else if recAct == "change_pw" {
 		if len(rec.Password0) == 0 || len(rec.Password) == 0 {
 			w.Write([]byte(`{"retcode":400,"retmsg":"missed args"}`))

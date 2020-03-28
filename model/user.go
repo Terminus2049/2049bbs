@@ -8,28 +8,29 @@ import (
 )
 
 type User struct {
-	Id            uint64 `json:"id"`
-	Name          string `json:"name"`
-	Gender        string `json:"gender"`
-	Flag          int    `json:"flag"`
-	Avatar        string `json:"avatar"`
-	Password      string `json:"password"`
-	Email         string `json:"email"`
-	Url           string `json:"url"`
-	Articles      uint64 `json:"articles"`
-	Replies       uint64 `json:"replies"`
-	RegTime       uint64 `json:"regtime"`
-	LastPostTime  uint64 `json:"lastposttime"`
-	LastReplyTime uint64 `json:"lastreplytime"`
-	LastLoginTime uint64 `json:"lastlogintime"`
-	About         string `json:"about"`
-	Notice        string `json:"notice"`
-	NoticeNum     int    `json:"noticenum"`
-	Hidden        bool   `json:"hidden"`
-	Session       string `json:"session"`
-	IgnoreNode    string `json:"ignorenode"`
-	IgnoreUser    string `json:"ignoreuser"`
-	Theme         string `json:"theme"`
+	Id                 uint64 `json:"id"`
+	Name               string `json:"name"`
+	Gender             string `json:"gender"`
+	Flag               int    `json:"flag"`
+	Avatar             string `json:"avatar"`
+	Password           string `json:"password"`
+	Email              string `json:"email"`
+	Url                string `json:"url"`
+	Articles           uint64 `json:"articles"`
+	Replies            uint64 `json:"replies"`
+	RegTime            uint64 `json:"regtime"`
+	LastPostTime       uint64 `json:"lastposttime"`
+	LastReplyTime      uint64 `json:"lastreplytime"`
+	LastLoginTime      uint64 `json:"lastlogintime"`
+	About              string `json:"about"`
+	Notice             string `json:"notice"`
+	NoticeNum          int    `json:"noticenum"`
+	Hidden             bool   `json:"hidden"`
+	Session            string `json:"session"`
+	IgnoreNode         string `json:"ignorenode"`
+	IgnoreUser         string `json:"ignoreuser"`
+	Theme              string `json:"theme"`
+	IgnoreLimitedUsers bool   `json:"ignorelimitedusers"`
 }
 
 type UserMini struct {

@@ -41,6 +41,13 @@
             </td>
         </tr>
         <tr>
+            <td width="120" align="right">批量屏蔽</td>
+            <td width="auto" align="left">
+                <label><input type="checkbox" id="ignorelimitedusers" value="1"
+                  {{if .Uobj.IgnoreLimitedUsers}}checked="checked"{{end}} />隐藏<a href="/user/list">受限用户</a>回复</label>
+            </td>
+        </tr>
+        <tr>
             <td width="120" align="right"></td>
             <td width="auto" align="left"><input type="submit" value="保存设置" name="submit" class="textbtn" /></td>
         </tr>
@@ -59,13 +66,15 @@
         var ignorenode = $('#ignorenode').val();
         var ignoreuser = $('#ignoreuser').val();
         var theme = $("input:radio[name='theme']:checked").val();
+        var ignorelimitedusers = $("#ignorelimitedusers:checked").val();
 
         $.ajax({
             type: "POST",
             url: "/setting",
             data: JSON.stringify({'act': 'info', 'email': email, 'url': url,
                                 'about': about, 'ignorenode': ignorenode,
-                                'ignoreuser': ignoreuser, 'theme': theme}),
+                                'ignoreuser': ignoreuser, 'theme': theme,
+                              'ignorelimitedusers': ignorelimitedusers}),
             dataType: "json",
             contentType: "application/json",
             success: function(data){

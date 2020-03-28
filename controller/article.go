@@ -399,7 +399,7 @@ func (h *BaseHandler) ArticleHomeList(w http.ResponseWriter, r *http.Request) {
 
 	// 类似 solidot 格言
 	if !evn.IsMobile {
-		proverbs := model.CommentList(db, "hscan", "article_comment:"+scf.ProverbId, "", 500, scf.TimeZone)
+		proverbs := model.CommentList(db, "hscan", "article_comment:"+scf.ProverbId, "", 500, scf.TimeZone, false)
 		// 剔除折叠的回复
 		for i := 0; i < len(proverbs.Items); i++ {
 			if proverbs.Items[i].Fold {
@@ -514,7 +514,7 @@ func (h *BaseHandler) ArticleDetail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cobj.Articles = db.Zget("category_article_num", youdb.I2b(cobj.Id)).Uint64()
-	pageInfo := model.CommentList(db, cmd, "article_comment:"+aid, key, scf.CommentListNum, scf.TimeZone)
+	pageInfo := model.CommentList(db, cmd, "article_comment:"+aid, key, scf.CommentListNum, scf.TimeZone, currentUser.IgnoreLimitedUsers)
 
 	if currentUser.IgnoreUser != "" {
 		for _, uid := range strings.Split(currentUser.IgnoreUser, ",") {
