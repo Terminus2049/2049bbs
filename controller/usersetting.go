@@ -157,9 +157,9 @@ func (h *BaseHandler) UserSettingPost(w http.ResponseWriter, r *http.Request) {
 		currentUser.Theme = rec.Theme
 		isChanged = true
 
-		var isHidden bool
-		if rec.IgnoreLimitedUsers == "1" {
-			isHidden = true
+		isHidden := true
+		if rec.IgnoreLimitedUsers != "1" {
+			isHidden = false
 		}
 		currentUser.IgnoreLimitedUsers = isHidden
 

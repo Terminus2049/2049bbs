@@ -166,6 +166,7 @@ func (h *BaseHandler) UserLoginPost(w http.ResponseWriter, r *http.Request) {
 		sampleID := rand.Intn(max-min+1) + min
 		uidStr := strconv.FormatUint(uint64(sampleID), 10)
 		uobj.Avatar = uidStr
+		uobj.IgnoreLimitedUsers = true
 
 		jb, _ := json.Marshal(uobj)
 		db.Hset("user", youdb.I2b(uobj.Id), jb)
