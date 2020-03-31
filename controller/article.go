@@ -506,6 +506,12 @@ func (h *BaseHandler) ArticleDetail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if cobj.Id == 20 && currentUser.Flag < 99 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(`{"retcode":404,"retmsg":"请勿在垃圾场逗留"}`))
+		return
+	}
+
 	// Authorized
 	if scf.Authorized && currentUser.Flag < 5 {
 		w.WriteHeader(http.StatusUnauthorized)
