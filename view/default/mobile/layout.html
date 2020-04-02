@@ -11,7 +11,7 @@
     <link href="/static/default/style_mobile.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
 
-    {{if or (ne .CurrentUser.Flag 0) (eq .PageName "user_login_register")}}
+    {{if ne .CurrentUser.Flag 0}}
     <link href="/static/css/jquery.toast.css" rel="stylesheet" type="text/css" />
     <script src="/static/js/jquery.min.js" type="text/javascript"></script>
     <script src="/static/js/jquery.toast.js" type="text/javascript"></script>
@@ -34,7 +34,6 @@
     <meta name="description" content="{{.Description}}" />
 
     {{if or (eq .PageName "article_detail") (eq .PageName "article_add")}}
-    <script src="/static/js/jquery.min.js" type="text/javascript"></script>
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
           tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
