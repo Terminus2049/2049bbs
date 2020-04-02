@@ -742,14 +742,23 @@ func (h *BaseHandler) ArticleDetailPost(w http.ResponseWriter, r *http.Request) 
 
 		// 不顶帖用户组 && 非首页节点帖子不更新首页时间线
 		ignorenodes := scf.NotHomeNodeIds
+		isHome := true
 		if len(ignorenodes) > 0 {
 			for _, node := range strings.Split(ignorenodes, ",") {
 				node, err := strconv.Atoi(node)
-				if err == nil && aobj.Cid != uint64(node) && currentUser.Flag != 6 {
-					// 总文章列表
-					db.Zset("article_timeline", youdb.I2b(aobj.Id), timeStamp)
+				if err == nil && (aobj.Cid == uint64(node)) {
+					isHome = false
 				}
 			}
+		}
+
+		if currentUser.Flag == 6 {
+			isHome = false
+		}
+
+		// 总文章列表
+		if isHome {
+			db.Zset("article_timeline", youdb.I2b(aobj.Id), timeStamp)
 		}
 
 		// 不顶帖用户组
