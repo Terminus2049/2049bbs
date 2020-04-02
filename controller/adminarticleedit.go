@@ -5,14 +5,15 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
-	"github.com/terminus2049/2049bbs/model"
-	"github.com/terminus2049/2049bbs/util"
-	"github.com/ego008/youdb"
-	"github.com/rs/xid"
-	"goji.io/pat"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/ego008/youdb"
+	"github.com/rs/xid"
+	"github.com/terminus2049/2049bbs/model"
+	"github.com/terminus2049/2049bbs/util"
+	"goji.io/pat"
 )
 
 func (h *BaseHandler) ArticleEdit(w http.ResponseWriter, r *http.Request) {
@@ -246,6 +247,19 @@ func (h *BaseHandler) ArticleEditPost(w http.ResponseWriter, r *http.Request) {
 
 		db.Zset("category_article_timeline:"+strconv.FormatUint(rec.Cid, 10), aidB, aobj.EditTime)
 		db.Zdel("category_article_timeline:"+strconv.FormatUint(oldCid, 10), aidB)
+	}
+
+	// 原来在主页区，被移动到非主区，从时间线内删除
+	if oldCid != 2 && oldCid != 4 && oldCid != 17 && oldCid != 19 && oldCid != 20 &&
+		(rec.Cid == 2 || rec.Cid == 4 || rec.Cid == 17 || rec.Cid == 19 || rec.Cid == 20) {
+		db.Zdel("article_timeline", youdb.I2b(aobj.Id))
+	}
+
+	// 原来在非主区，移动到主区，加入时间线
+
+	if (oldCid == 2 || oldCid == 4 || oldCid == 17 || oldCid == 19 || oldCid != 20) &&
+		(rec.Cid != 2 && rec.Cid != 4 && rec.Cid != 17 && rec.Cid != 19 && rec.Cid != 20) {
+		db.Zset("article_timeline", youdb.I2b(aobj.Id), aobj.EditTime)
 	}
 
 	if oldTitle != rec.Title {
