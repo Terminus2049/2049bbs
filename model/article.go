@@ -548,7 +548,7 @@ func ArticleFeedList(db *youdb.DB, limit, tz int) []ArticleFeedListItem {
 				for i := 0; i < (len(rs.Data) - 1); i += 2 {
 					item := Article{}
 					json.Unmarshal(rs.Data[i+1], &item)
-					if !item.Hidden && item.Cid != 19 && item.Cid != 20 {
+					if !item.Hidden && item.Cid != 19 && item.Cid != 20 && item.Cid != 4 {
 						aitems = append(aitems, item)
 						userMap[item.Uid] = UserMini{}
 						categoryMap[item.Cid] = CategoryMini{}
