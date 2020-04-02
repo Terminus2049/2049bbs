@@ -236,6 +236,9 @@ func (h *BaseHandler) ArticleEditPost(w http.ResponseWriter, r *http.Request) {
 	aobj.Title = rec.Title
 	aobj.Content = rec.Content
 	aobj.Tags = rec.Tags
+	if rec.Cid == 20 {
+		aobj.Tags = ""
+	}
 	aobj.CloseComment = closeComment
 
 	jb, _ := json.Marshal(aobj)
