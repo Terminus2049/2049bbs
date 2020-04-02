@@ -271,7 +271,7 @@ func (h *BaseHandler) ArticleHomeList(w http.ResponseWriter, r *http.Request) {
 
 	db := h.App.Db
 	scf := h.App.Cf.Site
-	pageInfo := model.ArticleList(db, cmd, "article_timeline", key, score, scf.HomeShowNum*2, scf.TimeZone, scf.NotHomeNodeIds)
+	pageInfo := model.ArticleList(db, cmd, "article_timeline", key, score, scf.HomeShowNum, scf.TimeZone, scf.NotHomeNodeIds)
 	currentUser, _ := h.CurrentUser(w, r)
 
 	// 首页第二栏节点
