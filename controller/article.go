@@ -171,13 +171,18 @@ func (h *BaseHandler) ArticleAddPost(w http.ResponseWriter, r *http.Request) {
 	db.Hset("article", aidB, jb)
 	// 总文章列表
 	ignorenodes := scf.NotHomeNodeIds
+	isHome := true
 	if len(ignorenodes) > 0 {
 		for _, node := range strings.Split(ignorenodes, ",") {
 			node, err := strconv.Atoi(node)
-			if err == nil && aobj.Cid != uint64(node) {
-				db.Zset("article_timeline", aidB, aobj.EditTime)
+			if err == nil && aobj.Cid == uint64(node) {
+				isHome = false
 			}
 		}
+	}
+
+	if isHome {
+		db.Zset("article_timeline", aidB, aobj.EditTime)
 	}
 
 	// 分类文章列表
@@ -271,7 +276,7 @@ func (h *BaseHandler) ArticleHomeList(w http.ResponseWriter, r *http.Request) {
 
 	db := h.App.Db
 	scf := h.App.Cf.Site
-	pageInfo := model.ArticleList(db, cmd, "article_timeline", key, score, scf.HomeShowNum, scf.TimeZone, scf.NotHomeNodeIds)
+	pageInfo := model.ArticleList(db, cmd, "article_timeline", key, score, scf.HomeShowNum, scf.TimeZone)
 	currentUser, _ := h.CurrentUser(w, r)
 
 	// 首页第二栏节点
@@ -280,7 +285,7 @@ func (h *BaseHandler) ArticleHomeList(w http.ResponseWriter, r *http.Request) {
 		cobj, err := model.CategoryGetById(db, cid)
 		if err == nil {
 			cobj.Articles = db.Zget("category_article_num", youdb.I2b(cobj.Id)).Uint64()
-			pageInfo2 := model.ArticleList(db, cmd, "category_article_timeline:"+cid, key, score, scf.HomeShowNum, scf.TimeZone, "")
+			pageInfo2 := model.ArticleList(db, cmd, "category_article_timeline:"+cid, key, score, scf.HomeShowNum, scf.TimeZone)
 			pageInfo.Items = append(pageInfo.Items, pageInfo2.Items...)
 		}
 	}

@@ -306,7 +306,7 @@ func (h *BaseHandler) UserDetail(w http.ResponseWriter, r *http.Request) {
 	if act == "reply" {
 		tb := "user_article_reply:" + uid
 		// pageInfo = model.UserArticleList(db, cmd, tb, key, h.App.Cf.Site.PageShowNum)
-		pageInfo = model.ArticleList(db, "z"+cmd, tb, key, score, scf.PageShowNum, scf.TimeZone, "")
+		pageInfo = model.ArticleList(db, "z"+cmd, tb, key, score, scf.PageShowNum, scf.TimeZone)
 	} else {
 		act = "post"
 		tb := "user_article_timeline:" + uid

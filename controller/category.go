@@ -53,7 +53,7 @@ func (h *BaseHandler) CategoryDetail(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"retcode":404,"retmsg":"仅登录用户可见"}`))
 		return
 	}
-	pageInfo := model.ArticleList(db, cmd, "category_article_timeline:"+cid, key, score, scf.HomeShowNum, scf.TimeZone, "")
+	pageInfo := model.ArticleList(db, cmd, "category_article_timeline:"+cid, key, score, scf.HomeShowNum, scf.TimeZone)
 
 	type pageData struct {
 		PageData
