@@ -735,10 +735,20 @@ func (h *BaseHandler) ArticleDetailPost(w http.ResponseWriter, r *http.Request) 
 		jb3, _ := json.Marshal(currentUser)
 		db.Hset("user", youdb.I2b(currentUser.Id), jb3)
 
+		// 不顶帖用户组 && 非首页节点帖子不更新首页时间线
+		ignorenodes := scf.NotHomeNodeIds
+		if len(ignorenodes) > 0 {
+			for _, node := range strings.Split(ignorenodes, ",") {
+				node, err := strconv.Atoi(node)
+				if err == nil && aobj.Cid != uint64(node) && currentUser.Flag != 6 {
+					// 总文章列表
+					db.Zset("article_timeline", youdb.I2b(aobj.Id), timeStamp)
+				}
+			}
+		}
+
 		// 不顶帖用户组
 		if currentUser.Flag != 6 {
-			// 总文章列表
-			db.Zset("article_timeline", youdb.I2b(aobj.Id), timeStamp)
 			// 分类文章列表
 			db.Zset("category_article_timeline:"+strconv.FormatUint(aobj.Cid, 10), youdb.I2b(aobj.Id), timeStamp)
 		}
