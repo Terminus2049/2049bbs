@@ -216,6 +216,7 @@
                         $("#id_preview pre code").each(function(i, block) {
                             hljs.highlightBlock(block);
                         });
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub,"id_preview"]);
                         $("#btn-preview").attr("disabled", false);
                     },
                     fail: function(errMsg) {
