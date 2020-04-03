@@ -51,6 +51,18 @@
     </script>
     {{end}}
 
+    {{if or (eq .PageName "comment_edit") (eq .PageName "article_edit")}}
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+    </script>
+
+    <script type="text/javascript" async
+      src="/static/js/MathJax.js?config=TeX-AMS_HTML.js">
+    </script>
+    {{end}}
+
     <script type="text/javascript">
         $(function(){
             $("#go-to-top").click(function(){
