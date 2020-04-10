@@ -208,35 +208,38 @@ func (h *BaseHandler) ArticleAddPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// @ somebody in content
-	sbs := util.GetMention(rec.Content,
-		[]string{currentUser.Name, strconv.FormatUint(currentUser.Id, 10)})
 
-	aid := strconv.FormatUint(newAid, 10)
-	for _, sb := range sbs {
-		var sbObj model.User
-		sbu, err := strconv.ParseUint(sb, 10, 64)
-		if err != nil {
-			// @ user name
-			sbObj, err = model.UserGetByName(db, strings.ToLower(sb))
-		} else {
-			// @ user id
-			sbObj, err = model.UserGetById(db, sbu)
-		}
+	if rec.Cid != 21 {
+		sbs := util.GetMention(rec.Content,
+			[]string{currentUser.Name, strconv.FormatUint(currentUser.Id, 10)})
 
-		if err == nil {
-			if len(sbObj.Notice) > 0 {
-				aidList := util.SliceUniqStr(strings.Split(aid+","+sbObj.Notice, ","))
-				if len(aidList) > 100 {
-					aidList = aidList[:100]
-				}
-				sbObj.Notice = strings.Join(aidList, ",")
-				sbObj.NoticeNum = len(aidList)
+		aid := strconv.FormatUint(newAid, 10)
+		for _, sb := range sbs {
+			var sbObj model.User
+			sbu, err := strconv.ParseUint(sb, 10, 64)
+			if err != nil {
+				// @ user name
+				sbObj, err = model.UserGetByName(db, strings.ToLower(sb))
 			} else {
-				sbObj.Notice = aid
-				sbObj.NoticeNum = 1
+				// @ user id
+				sbObj, err = model.UserGetById(db, sbu)
 			}
-			jb, _ := json.Marshal(sbObj)
-			db.Hset("user", youdb.I2b(sbObj.Id), jb)
+
+			if err == nil {
+				if len(sbObj.Notice) > 0 {
+					aidList := util.SliceUniqStr(strings.Split(aid+","+sbObj.Notice, ","))
+					if len(aidList) > 100 {
+						aidList = aidList[:100]
+					}
+					sbObj.Notice = strings.Join(aidList, ",")
+					sbObj.NoticeNum = len(aidList)
+				} else {
+					sbObj.Notice = aid
+					sbObj.NoticeNum = 1
+				}
+				jb, _ := json.Marshal(sbObj)
+				db.Hset("user", youdb.I2b(sbObj.Id), jb)
+			}
 		}
 	}
 
@@ -768,33 +771,36 @@ func (h *BaseHandler) ArticleDetailPost(w http.ResponseWriter, r *http.Request) 
 		}
 
 		// @ somebody in comment & topic author
-		sbs := util.GetMention("@"+strconv.FormatUint(aobj.Uid, 10)+" "+rec.Content,
-			[]string{currentUser.Name, strconv.FormatUint(currentUser.Id, 10)})
-		for _, sb := range sbs {
-			var sbObj model.User
-			sbu, err := strconv.ParseUint(sb, 10, 64)
-			if err != nil {
-				// @ user name
-				sbObj, err = model.UserGetByName(db, strings.ToLower(sb))
-			} else {
-				// @ user id
-				sbObj, err = model.UserGetById(db, sbu)
-			}
 
-			if err == nil {
-				if len(sbObj.Notice) > 0 {
-					aidList := util.SliceUniqStr(strings.Split(aid+","+sbObj.Notice, ","))
-					if len(aidList) > 100 {
-						aidList = aidList[:100]
-					}
-					sbObj.Notice = strings.Join(aidList, ",")
-					sbObj.NoticeNum = len(aidList)
+		if aobj.Cid != 21 {
+			sbs := util.GetMention("@"+strconv.FormatUint(aobj.Uid, 10)+" "+rec.Content,
+				[]string{currentUser.Name, strconv.FormatUint(currentUser.Id, 10)})
+			for _, sb := range sbs {
+				var sbObj model.User
+				sbu, err := strconv.ParseUint(sb, 10, 64)
+				if err != nil {
+					// @ user name
+					sbObj, err = model.UserGetByName(db, strings.ToLower(sb))
 				} else {
-					sbObj.Notice = aid
-					sbObj.NoticeNum = 1
+					// @ user id
+					sbObj, err = model.UserGetById(db, sbu)
 				}
-				jb, _ := json.Marshal(sbObj)
-				db.Hset("user", youdb.I2b(sbObj.Id), jb)
+
+				if err == nil {
+					if len(sbObj.Notice) > 0 {
+						aidList := util.SliceUniqStr(strings.Split(aid+","+sbObj.Notice, ","))
+						if len(aidList) > 100 {
+							aidList = aidList[:100]
+						}
+						sbObj.Notice = strings.Join(aidList, ",")
+						sbObj.NoticeNum = len(aidList)
+					} else {
+						sbObj.Notice = aid
+						sbObj.NoticeNum = 1
+					}
+					jb, _ := json.Marshal(sbObj)
+					db.Hset("user", youdb.I2b(sbObj.Id), jb)
+				}
 			}
 		}
 
