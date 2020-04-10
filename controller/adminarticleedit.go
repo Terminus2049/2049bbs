@@ -252,16 +252,29 @@ func (h *BaseHandler) ArticleEditPost(w http.ResponseWriter, r *http.Request) {
 		db.Zdel("category_article_timeline:"+strconv.FormatUint(oldCid, 10), aidB)
 	}
 
+	ignorenodes := scf.NotHomeNodeIds
+	oldisHome := true
+	newisHome := true
+
+	if len(ignorenodes) > 0 {
+		for _, node := range strings.Split(ignorenodes, ",") {
+			node, err := strconv.Atoi(node)
+			if err == nil && oldCid == uint64(node) {
+				oldisHome = false
+			}
+			if err == nil && rec.Cid == uint64(node) {
+				newisHome = false
+			}
+		}
+	}
+
 	// 原来在主页区，被移动到非主区，从时间线内删除
-	if oldCid != 2 && oldCid != 4 && oldCid != 17 && oldCid != 19 && oldCid != 20 &&
-		(rec.Cid == 2 || rec.Cid == 4 || rec.Cid == 17 || rec.Cid == 19 || rec.Cid == 20) {
+	if oldisHome && !newisHome {
 		db.Zdel("article_timeline", youdb.I2b(aobj.Id))
 	}
 
 	// 原来在非主区，移动到主区，加入时间线
-
-	if (oldCid == 2 || oldCid == 4 || oldCid == 17 || oldCid == 19 || oldCid != 20) &&
-		(rec.Cid != 2 && rec.Cid != 4 && rec.Cid != 17 && rec.Cid != 19 && rec.Cid != 20) {
+	if !oldisHome && newisHome {
 		db.Zset("article_timeline", youdb.I2b(aobj.Id), aobj.EditTime)
 	}
 
