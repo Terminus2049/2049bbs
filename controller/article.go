@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"html"
 	"html/template"
 	"math/rand"
 	"net/http"
@@ -569,12 +570,20 @@ func (h *BaseHandler) ArticleDetail(w http.ResponseWriter, r *http.Request) {
 		Views    uint64
 	}
 
+	contentRune := []rune(aobj.Content)
+	Des := aobj.Content
+	if len(contentRune) > 150 {
+		contentRune := []rune(aobj.Content)
+		Des = string(contentRune[:150]) + "..."
+	}
+	Des = html.EscapeString(Des)
+
 	tpl := h.CurrentTpl(r)
 	evn := &pageData{}
 	evn.SiteCf = scf
 	evn.Title = aobj.Title + " - " + cobj.Name + " - " + scf.Name
 	evn.Keywords = aobj.Tags
-	evn.Description = cobj.Name + " - " + aobj.Title + " - " + aobj.Tags
+	evn.Description = Des
 	evn.IsMobile = tpl == "mobile"
 
 	evn.CurrentUser = currentUser
