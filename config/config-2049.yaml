@@ -13,7 +13,7 @@ Main:
     TLSKeyFile: "certs/cloudflare.key"
 Site:
     Name: "2049BBS"
-    Desc: "Speak with no fear"
+    Desc: "自由人的精神角落，一个无需手机号和邮箱即可发言的论坛。"
     AdminEmail: ""
     MainDomain: "http://2049bbs.xyz"
     MainNodeIds: "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21"
