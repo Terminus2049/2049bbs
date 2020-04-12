@@ -95,6 +95,23 @@ a:active {color: #bd0a01;text-decoration: none;}
 a:visited {color: #15C;text-decoration: none;}
 a:hover {color: #bd0a01;text-decoration: underline;}
 
+.videowrapper {
+    float: none;
+    clear: both;
+    width: 100%;
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 25px;
+    height: 0;
+}
+.videowrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 .c { clear:both; }
 .float-left { float:left; }
 .float-right { float:right; }
