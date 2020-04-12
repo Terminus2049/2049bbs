@@ -3,21 +3,23 @@ package util
 import (
 	// "crypto/md5"
 	// "encoding/hex"
+
 	"regexp"
 
 	"github.com/ego008/youdb"
 	// "strconv"
 	"strings"
 
-	"github.com/shurcooL/github_flavored_markdown"
+	"github.com/Terminus2049/github_flavored_markdown"
 )
 
 var (
 	// codeRegexp    = regexp.MustCompile("(?s:```(.+?)```)")
 	// imgRegexp     = regexp.MustCompile(`(https?://[\w./:]+/[\w./]+\.(jpg|jpe|jpeg|gif|png))`)
 	// gistRegexp    = regexp.MustCompile(`(https?://gist\.github\.com/([a-zA-Z0-9-]+/)?[\d]+)`)
+	youtubeRegexp = regexp.MustCompile(`http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?`)
 	mentionRegexp = regexp.MustCompile(`(?:\s|^)@([a-zA-Z0-9\p{Han}]{1,32})\s?`)
-	// urlRegexp     = regexp.MustCompile(`([^;"='>])(https?://[^\s<]+[^\s<.)])`)
+	// urlRegexp     = regexp.MustCompile(`(http|ftp|https):\/\/([\w\-_]+(?:(?:\.[\w\-_]+)+))([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?`)
 	// nlineRegexp   = regexp.MustCompile(`\s{2,}`)
 	// youku1Regexp = regexp.MustCompile(`https?://player\.youku\.com/player\.php/sid/([a-zA-Z0-9=]+)/v\.swf`)
 	// youku2Regexp = regexp.MustCompile(`https?://v\.youku\.com/v_show/id_([a-zA-Z0-9=]+)(/|\.html?)?`)
@@ -132,6 +134,17 @@ func ContentRich(db *youdb.DB, input string) string {
 	text := []byte(input)
 	md := github_flavored_markdown.Markdown(text)
 	output := string(md)
+
+	if strings.Index(output, "youtu.be") >= 0 {
+		output = youtubeRegexp.ReplaceAllString(output, `
+			</p>
+			<div class="videowrapper">
+				<iframe src="https://www.youtube.com/embed/$1" frameborder="0"
+					allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+				</iframe>
+			</div>
+			<p>`)
+	}
 
 	return output
 }
