@@ -764,7 +764,7 @@ func (h *BaseHandler) ArticleDetailPost(w http.ResponseWriter, r *http.Request) 
 			}
 		}
 
-		if currentUser.Flag == 6 {
+		if currentUser.Flag == 6 || currentUser.Flag == 7 {
 			isHome = false
 		}
 
@@ -774,7 +774,7 @@ func (h *BaseHandler) ArticleDetailPost(w http.ResponseWriter, r *http.Request) 
 		}
 
 		// 不顶帖用户组
-		if currentUser.Flag != 6 {
+		if currentUser.Flag != 6 && currentUser.Flag != 7 {
 			// 分类文章列表
 			db.Zset("category_article_timeline:"+strconv.FormatUint(aobj.Cid, 10), youdb.I2b(aobj.Id), timeStamp)
 		}

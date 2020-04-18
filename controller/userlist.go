@@ -29,7 +29,7 @@ func (h *BaseHandler) UserList(w http.ResponseWriter, r *http.Request) {
 		flag = "6"
 	}
 
-	if flag != "6" && flag != "0" {
+	if flag != "6" && flag != "0" && flag != "7" {
 		w.Write([]byte(`{"retcode":403,"retmsg":"flag forbidden}`))
 		return
 	}
